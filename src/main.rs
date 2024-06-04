@@ -55,24 +55,26 @@ async fn upload_hander(
     .await
     .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR.into_response())?
   {
-    let file_name = field.file_name().unwrap_or_default().to_owned();
-    let content_type = field.file_name().unwrap_or_default().to_owned();
-    let key = uuid::Uuid::new_v4().to_string();
-    let url = format!("https://{bucket_name}.s3.amazonaws.com/{key}");
+    if let Some("files") = field.name() {
+      let file_name = field.file_name().unwrap_or_default().to_owned();
+      let content_type = field.file_name().unwrap_or_default().to_owned();
+      let key = uuid::Uuid::new_v4().to_string();
+      let url = format!("https://{bucket_name}.s3.amazonaws.com/{key}");
 
-    let bytes = field
-      .bytes()
-      .await
-      .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR.into_response())?;
+      let bytes = field
+        .bytes()
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR.into_response())?;
 
-    files.push(File {
-      file_name,
-      content_type,
-      bytes,
-      key,
-      url,
-      successful: false,
-    })
+      files.push(File {
+        file_name,
+        content_type,
+        bytes,
+        key,
+        url,
+        successful: false,
+      })
+    }
   }
 
   for file in &mut files {
