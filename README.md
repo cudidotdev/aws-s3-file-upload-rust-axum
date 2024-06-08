@@ -1,5 +1,7 @@
 # An AWS S3 file upload service in Rust Axum
 
+Associated YouTube video: [Watch the tutorial video on YouTube](https://youtu.be/1zRJcmX_7QI?si=D91LzZo75suCRLFR)
+
 ## Routes
 ```http
 POST /upload
